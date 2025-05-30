@@ -45,7 +45,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
   void _handleSend(String input) {
     final time = DateFormat('HH:mm:ss').format(DateTime.now());
     if (input.trim().isEmpty) return;
-    fetchLiveChat(input,time);
+    fetchLiveChat(input, time);
     _messageController.clear();
   }
 
@@ -262,42 +262,42 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                 filled: true,
                 fillColor: Colors.white,
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 8,
+                  horizontal: 16,
+                  vertical: 16,
                 ),
                 hintText: 'Write a message...',
                 hintStyle: TextStyle(
                   fontFamily: 'Arial',
                   fontSize: 14,
-                  color: Color(0xFF555555),
+                  color: Colors.grey.shade400,
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                prefixIcon: Icon(
-                  FontAwesomeIcons.solidPaperPlane,
-                  color: Colors.transparent,
-                ),
+                // prefixIcon: Icon(
+                //   FontAwesomeIcons.solidPaperPlane,
+                //   color: Colors.transparent,
+                // ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFFFF9900), // ขอบสีส้มตอนที่ไม่ได้โฟกัส
+                    color: Colors.orange, // ขอบสีส้มตอนที่ไม่ได้โฟกัส
                     width: 1.0,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFFFF9900), // ขอบสีส้มตอนที่โฟกัส
+                    color: Colors.orange, // ขอบสีส้มตอนที่โฟกัส
                     width: 1.0,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 2, right: 16),
+          padding: EdgeInsets.only(left: 2, right: 18),
           child: InkWell(
             onTap: () {
               _handleSend(_messageController.text);
@@ -305,6 +305,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
             child: Icon(
               FontAwesomeIcons.solidPaperPlane,
               color: Color(0xFFFF9900),
+              size: 20,
             ),
           ),
         ),
@@ -346,15 +347,26 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                   ),
                 );
               },
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    Icon(Icons.chat_bubble_outline, color: Colors.white),
+                    Expanded(
+                      child: Text(
+                        "New Chat",
+                        style: TextStyle(
+                          fontFamily: 'Arial',
+                          fontSize: 22,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                     SizedBox(width: 8),
-                    Text(
-                      "New Chat",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    Icon(
+                      Icons.edit_note,
+                      color: Colors.white,
+                      size: 28,
                     ),
                   ],
                 ),
@@ -364,13 +376,15 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
             Expanded(
               child: ListView(
                 children: [
-                  Container(child: _drawerItemHistory(Icons.history, "Previous Chats", 0)),
+                  Container(
+                      child: _drawerItemHistory(
+                          Icons.history, "Previous Chats", 0)),
                 ],
               ),
             ),
             Divider(color: Colors.white24),
-            // _drawerItem(Icons.security, "Security", 1),
-            // _drawerItem(Icons.help_outline, "Help & FAQ", 2),
+            _drawerItem(Icons.security, "Security", 1),
+            _drawerItem(Icons.help_outline, "Help & FAQ", 2),
             ListTile(
               leading: CachedNetworkImage(
                 imageUrl: widget.employee.emp_avatar,
@@ -495,10 +509,20 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
       leading: Icon(icon, color: Colors.white70),
       title: Text(title, style: TextStyle(color: Colors.white)),
       onTap: () {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Tapped: $title')));
+        // Navigator.pop(context);
+        if (screen == 1) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatSecurityScreen(
+                  employee: widget.employee,
+                ),
+              ));
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Tapped: $title')));
+        }
       },
     );
   }
@@ -519,7 +543,6 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
                       Flexible(child: _isChatIsload(msg, isLast)),
                       const SizedBox(width: 8),
                       _buildAvatarR(widget.employee.emp_avatar),
@@ -649,7 +672,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         mainAxisAlignment:
-        msg.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+            msg.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(
@@ -660,7 +683,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
               margin: EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
                 color:
-                msg.isUser ? Colors.orange.shade300 : Colors.grey.shade300,
+                    msg.isUser ? Colors.orange.shade400 : Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -669,6 +692,27 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.start,
                 children: [
+                  // AnimatedTextKit(
+                  //     animatedTexts: [
+                  //       TyperAnimatedText(
+                  //         msg.text,
+                  //         textStyle: const TextStyle(
+                  //           fontSize: 14,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //         speed: const Duration(milliseconds: 10),
+                  //       ),
+                  //     ],
+                  //
+                  //     totalRepeatCount: 1,
+                  //     pause: const Duration(milliseconds: 20),
+                  //     displayFullTextOnTap: false,
+                  //     stopPauseOnTap: false,
+                  //     isRepeatingAnimation:false,
+                  //     repeatForever:false,
+                  //     // controller: myAnimatedTextController
+                  // ),
+
                   SelectableText.rich(
                     TextSpan(
                       style: TextStyle(
@@ -684,7 +728,9 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                             text: ' ${msg.url}',
                             style: TextStyle(
                               color: Colors.blue,
-                              decoration: TextDecoration.underline,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              decoration: TextDecoration.underline, //การขีกเส้น
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -695,6 +741,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                       ],
                     ),
                   ),
+
                   SizedBox(height: 6),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -735,7 +782,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                             fontFamily: 'Arial',
                             fontSize: 12,
                             color:
-                            msg.isUser ? Colors.white : Color(0xFF555555),
+                                msg.isUser ? Colors.white : Color(0xFF555555),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -791,13 +838,15 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
               ),
             );
           });
-
         } else {
           replyMessage = "ขออภัย ผมยังไม่เข้าใจคำถามนี้ 😅";
           setState(() {
             _messages.add(
               ChatMessage(
-                  text: _getBotReply(message), url: '', isUser: false, time: ''),
+                  text: _getBotReply(message),
+                  url: '',
+                  isUser: false,
+                  time: ''),
             );
           });
         }
@@ -819,7 +868,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
     final response = await http.post(
       Uri.parse("$hostDev/api/origami/ai/live_create_chat.php"),
       body: {
-        'comp_id':  widget.employee.comp_id,
+        'comp_id': widget.employee.comp_id,
         'emp_id': widget.employee.emp_id,
       },
     );
@@ -863,7 +912,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
               text: item['message'] ?? '',
               isUser: item['key'] == 'R',
               url: '', // ถ้ามี url จริง ให้ใส่จาก item['url']
-              time: item['date_created'].substring(11)??'', // ใช้เวลาแสดงได้
+              time: item['date_created'].substring(11) ?? '', // ใช้เวลาแสดงได้
             );
           }).toList();
 
@@ -884,7 +933,8 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
 
   // ประวัติด้านข้าง
   Future<List<HistotyMessage>> fetchHistotyMessage() async {
-    print('ประวัติด้านข้าง ${widget.employee.emp_id} ${widget.employee.comp_id}');
+    print(
+        'ประวัติด้านข้าง ${widget.employee.emp_id} ${widget.employee.comp_id}');
     final response = await http.post(
       Uri.parse('$hostDev/api/origami/ai/live_chat_history.php'),
       headers: {'Authorization': 'Bearer $authorization'},
