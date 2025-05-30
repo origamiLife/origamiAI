@@ -33,3 +33,5 @@ export 'package:carousel_slider/carousel_slider.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:shimmer/shimmer.dart';
 export 'package:share_plus/share_plus.dart';
+export 'package:animated_text_kit/animated_text_kit.dart';
+

@@ -20,7 +20,8 @@ void main() async {
   await Hive.openBox('userBox');
 
   runApp(MaterialApp(
-    home: Scaffold(body: Center(child: Text('Test Android'))),
+    debugShowCheckedModeBanner: false,
+    home: MyApp(),
   ));
 }
 

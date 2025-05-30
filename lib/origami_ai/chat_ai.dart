@@ -283,21 +283,21 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                     color: Color(0xFFFF9900), // ขอบสีส้มตอนที่ไม่ได้โฟกัส
                     width: 1.0,
                   ),
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: Color(0xFFFF9900), // ขอบสีส้มตอนที่โฟกัส
                     width: 1.0,
                   ),
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 8, right: 16),
+          padding: EdgeInsets.only(left: 2, right: 16),
           child: InkWell(
             onTap: () {
               _handleSend(_messageController.text);
@@ -364,13 +364,13 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
             Expanded(
               child: ListView(
                 children: [
-                  _drawerItemHistory(Icons.history, "Previous Chats", 0),
+                  Container(child: _drawerItemHistory(Icons.history, "Previous Chats", 0)),
                 ],
               ),
             ),
             Divider(color: Colors.white24),
-            _drawerItem(Icons.security, "Security", 1),
-            _drawerItem(Icons.help_outline, "Help & FAQ", 2),
+            // _drawerItem(Icons.security, "Security", 1),
+            // _drawerItem(Icons.help_outline, "Help & FAQ", 2),
             ListTile(
               leading: CachedNetworkImage(
                 imageUrl: widget.employee.emp_avatar,
@@ -726,16 +726,18 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                         )
                       else
                         SizedBox(width: 36),
-                      Text(
-                        msg.time.isNotEmpty
-                            ? msg.time
-                            : DateFormat('HH:mm:ss').format(DateTime.now()),
-                        style: TextStyle(
-                          fontFamily: 'Arial',
-                          fontSize: 12,
-                          color:
-                          msg.isUser ? Colors.white : Color(0xFF555555),
-                          fontWeight: FontWeight.w500,
+                      Flexible(
+                        child: Text(
+                          msg.time.isNotEmpty
+                              ? msg.time
+                              : DateFormat('HH:mm:ss').format(DateTime.now()),
+                          style: TextStyle(
+                            fontFamily: 'Arial',
+                            fontSize: 12,
+                            color:
+                            msg.isUser ? Colors.white : Color(0xFF555555),
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -765,8 +767,8 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
       final response = await http.post(
         Uri.parse('$hostDev/api/origami/ai/live_chat.php'),
         body: {
-          'comp_id': '2', //widget.employee.comp_id,
-          'emp_id': '2', //widget.employee.emp_id,
+          'comp_id': widget.employee.comp_id,
+          'emp_id': widget.employee.emp_id,
           'auth_password': authorization,
           'emp_message': message,
           'group_id': groupIntId.toString(),
@@ -806,7 +808,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
       }
     } catch (e) {
       setState(() {
-        replyMessage = 'เกิดข้อผิดพลาด: $e';
+        replyMessage = 'เกิดข้อผิดพลาดแชท: $e';
       });
     }
   }
@@ -817,8 +819,8 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
     final response = await http.post(
       Uri.parse("$hostDev/api/origami/ai/live_create_chat.php"),
       body: {
-        'comp_id': '2', // widget.employee.comp_id,
-        'emp_id': '2', // widget.employee.emp_id,
+        'comp_id':  widget.employee.comp_id,
+        'emp_id': widget.employee.emp_id,
       },
     );
     if (response.statusCode == 200) {
@@ -838,14 +840,14 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
   List<InchatChatHistoty> chatModel = [];
   // ประวัติด้านใน
   Future<void> fetchInchatHistotyChat(String group_id) async {
-    print('ดึงประวัติการแชท...');
+    print('ดึงประวัติการแชท... $group_id');
     try {
       final response = await http.post(
         Uri.parse('$hostDev/api/origami/ai/live_inchat_history.php'),
         headers: {'Authorization': 'Bearer $authorization'},
         body: {
-          'emp_id': '2', // ปรับเป็น widget.employee.emp_id ถ้ามี
-          'comp_id': '2', // ปรับเป็น widget.employee.comp_id ถ้ามี
+          'emp_id': widget.employee.emp_id,
+          'comp_id': widget.employee.comp_id,
           'group_id': group_id,
         },
       );
@@ -876,19 +878,19 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
         );
       }
     } catch (e) {
-      print('เกิดข้อผิดพลาด: $e');
+      print('เกิดข้อผิดพลาดประวัติ: $e');
     }
   }
 
   // ประวัติด้านข้าง
   Future<List<HistotyMessage>> fetchHistotyMessage() async {
-    print('ประวัติด้านข้าง');
+    print('ประวัติด้านข้าง ${widget.employee.emp_id} ${widget.employee.comp_id}');
     final response = await http.post(
       Uri.parse('$hostDev/api/origami/ai/live_chat_history.php'),
       headers: {'Authorization': 'Bearer $authorization'},
       body: {
-        'emp_id': '2', //widget.employee.emp_id,
-        'comp_id': '2', //widget.employee.comp_id,
+        'emp_id': widget.employee.emp_id,
+        'comp_id': widget.employee.comp_id,
         'page': pages.toString(),
       },
     );
