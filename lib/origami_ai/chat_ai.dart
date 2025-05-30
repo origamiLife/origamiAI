@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../login/origami_login.dart';
 import '../main.dart';
-import 'chat_settings.dart';
+import 'chat_security.dart';
 import 'package:flutter/gestures.dart';
 
 class ChatOrigamiAi extends StatefulWidget {
@@ -519,6 +519,7 @@ class _ChatOrigamiAiState extends State<ChatOrigamiAi> {
                 ),
               ));
         } else {
+          Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text('Tapped: $title')));
